@@ -1,0 +1,18 @@
+kafka:
+  image: antlypls/kafka:0.10.0.1
+  environment:
+    - KAFKA=localhost:9092
+    - ZOOKEEPER=localhost:2181
+  container_name: test_kafka
+  expose:
+    - "2181"
+    - "9092"
+
+spark:
+  image: antlypls/spark:1.6.2
+  command: -d
+  volumes:
+    - ./target/scala-2.10:/app
+  container_name: test_spark
+  links:
+   - kafka
