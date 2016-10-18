@@ -15,4 +15,13 @@ spark:
     - ./target/scala-2.10:/app
   container_name: test_spark
   links:
-   - kafka
+    - kafka
+
+ubuntu:
+  image: ubuntu:toolkit
+  command: sleep infinity
+  volumes:
+    - ./python:/mnt
+  container_name: test_toolkit
+  links:
+    - kafka
