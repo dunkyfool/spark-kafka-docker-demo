@@ -13,7 +13,7 @@ _topic = b'qq'
 #print(len(msg_payload))
 
 #bootstrap_servers = 'localhost:9092'
-bootstrap_servers = '172.17.0.2:9092'
+bootstrap_servers = '172.20.0.2:9092'
 
 producer_timings = {}
 consumer_timings = {}
@@ -34,7 +34,8 @@ def pykafka_test_p(use_rdkafka=False):
 
     produce_start = time.time()
     for i in range(msg_count):
-        producer.produce(msg_payload)
+        #producer.produce(msg_payload)
+        producer.produce(str(i))
 
     producer.stop()
     return time.time() - produce_start

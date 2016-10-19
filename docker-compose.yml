@@ -1,27 +1,44 @@
-kafka:
-  image: antlypls/kafka:0.10.0.1
-  environment:
-    - KAFKA=localhost:9092
-    - ZOOKEEPER=localhost:2181
-  container_name: test_kafka
-  expose:
-    - "2181"
-    - "9092"
+version: '2'
 
-spark:
-  image: antlypls/spark:1.6.2
-  command: -d
-  volumes:
-    - ./target/scala-2.10:/app
-  container_name: test_spark
-  links:
-    - kafka
+services:
+  kafka:
+    image: antlypls/kafka:0.10.0.1
+    hostname: "kafka"
+    environment:
+      - KAFKA=localhost:9092
+      - ZOOKEEPER=localhost:2181
+    container_name: test_kafka
+    expose:
+      - "2181"
+      - "9092"
+    networks:
+      - logging
+  
+  spark:
+    image: antlypls/spark:1.6.2
+    hostname: "spark"
+    command: -d
+    volumes:
+      - ./target/scala-2.10:/app
+    container_name: test_spark
+    links:
+      - kafka
+    networks:
+      - logging
+  
+  ubuntu:
+    image: ubuntu:toolkit
+    hostname: "toolkit"
+    command: sleep infinity
+    volumes:
+      - ./python:/mnt
+    container_name: test_toolkit
+    links:
+      - kafka
+    networks:
+      - logging
 
-ubuntu:
-  image: ubuntu:toolkit
-  command: sleep infinity
-  volumes:
-    - ./python:/mnt
-  container_name: test_toolkit
-  links:
-    - kafka
+networks:
+  logging:
+    external:
+      name: logging
